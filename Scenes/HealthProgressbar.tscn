@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Assets/Images/progressbarfull.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Images/progressbar.png" type="Texture" id=2]
+[ext_resource path="res://Scripts/Progressbar.gd" type="Script" id=3]
+
+[node name="HealthProgressBar" type="Node2D"]
+z_index = 20
+script = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="Sprite"]
+position = Vector2( -7, -0.5 )
+scale = Vector2( 14, 1 )
+texture = ExtResource( 1 )
+centered = false

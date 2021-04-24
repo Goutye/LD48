@@ -9,18 +9,20 @@ var is_dead := false
 export(int) var attack = 1
 export(int) var defence = 0
 export(int) var MaxHP = 1
-var HP = 1
+var HP = 1.0
 export(float) var time_every_attack = 1.0
 var current_time_attack = 1.0
 
 
 func _ready():
 	$Body/ProgressBar.set_ratio(1.0)
+	$Body/AttackProgressBar.set_ratio(1.0)
 	HP = MaxHP
 
 func _process(delta):
 	if current_time_attack < time_every_attack:
 		current_time_attack += delta
+		$Body/AttackProgressBar.set_ratio(clamp(current_time_attack / time_every_attack, 0.0, 1.0))
 			
 
 func receive_damage(enemy_attack : int) -> int:

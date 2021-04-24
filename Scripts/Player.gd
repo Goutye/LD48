@@ -15,17 +15,38 @@ var should_check_portion = true
 #fight
 var is_paused := false
 
+#wearable
+var helmet
+var armor
+var weapon
+
+#stats
+var BaseMaxHP = 10
+var BaseAttack = 1
+var BaseDefence = 1
+var BaseRegen = 0
+
 
 func _ready():
 	body = $Body
 	reset()
+	$Body/Camera2D/Inventory.initialize($Body/Camera2D, self)
 	
 func reset():
 	#stats
-	attack = 1
-	defence = 1
-	MaxHP = 10
+	helmet = Item.new()
+	helmet.type = Item.ItemType.HELMET
+	helmet.defence = 1
+	armor = Item.new()
+	armor.type = Item.ItemType.ARMOR
+	armor.HP = 1
+	weapon = Item.new()
+	weapon.type = Item.ItemType.WEAPON
+	weapon.attack = 1
 	HP = MaxHP
+	
+	update_stats()
+	
 	is_paused = false
 	should_check_portion = true
 	$Body/ProgressBar.set_ratio(HP / float(MaxHP))
@@ -53,6 +74,11 @@ func check_portion():
 
 func get_feet_position():
 	return $Body.global_position - $Body.position
+
+func update_stats():
+	MaxHP = BaseMaxHP + helmet.HP + armor.HP + weapon.HP
+	defence = BaseDefence + helmet.defence + armor.defence + weapon.defence
+	attack = BaseAttack + helmet.attack + armor.attack + weapon.attack
 
 func start_fight():
 	is_paused = true

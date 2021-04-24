@@ -30,21 +30,26 @@ func initialize(portion_nb, player):
 	
 	var area_size = (portion_nb_pixels - portion_offset_encounter) / nb_encounters
 	
+	print(start_x, " ", player.position)
 	for i in range(nb_encounters):
 		var encounter_value = randf()
 		
 		if encounter_value < ratio_enemy:
 			var enemy = enemies[randi() % enemies.size()].instance()
 			add_child(enemy)
-			enemy.position.x = randf() * area_size + start_x + portion_offset_encounter * 0.5 + i * area_size
+			enemy.position.x = randf() * area_size + portion_offset_encounter * 0.5 + i * area_size
 			enemy.position.y = player.get_feet_position().y
 			enemy.connect("on_fight_start", self, "on_fight_start")
+			print(enemy.position)
 		elif encounter_value < ratio_enemy + ratio_treasure:
 			var treasure = treasure_scene.instance()
 			add_child(treasure)
-			treasure.position.x = randf() * area_size + start_x + portion_offset_encounter * 0.5 + i * area_size
+			treasure.position.x = randf() * area_size + portion_offset_encounter * 0.5 + i * area_size
 			treasure.position.y = player.get_feet_position().y
 			treasure.initialize(portion_nb)
+			print(treasure.position)
+		else:
+			print("bad value for encounter")
 
 func _process(delta):
 	if is_fighting:
