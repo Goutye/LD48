@@ -15,7 +15,6 @@ var tileset
 
 var portion_nb_pixels = 64 * 100
 var portion_offset_encounter = portion_nb_pixels * 0.1
-var boss_portion_id = 1
 
 #fight
 var player
@@ -33,7 +32,7 @@ func initialize(portion_nb, player):
 	self.player = player
 	portion_id = portion_nb
 	
-	if portion_id != boss_portion_id:
+	if (portion_id + 1) % global.boss_portion_id != 0 :
 		tileset = tilesets[randi() % tilesets.size()]
 		$Background.tile_set = tileset
 		$Playerground.tile_set = tileset
@@ -46,7 +45,7 @@ func initialize(portion_nb, player):
 	
 	print(start_x, " ", player.position)
 	for i in range(nb_encounters):
-		if portion_id == boss_portion_id and i == nb_encounters - 1:
+		if (portion_id + 1) % global.boss_portion_id == 0 and i == nb_encounters - 1:
 			var boss = boss_scene.instance()
 			add_child(boss)
 			boss.position.x = area_size * 0.5 + portion_offset_encounter * 0.5 + i * area_size
@@ -88,7 +87,7 @@ func fight():
 		if enemy.can_attack():
 			enemy.attack([player])
 	else:
-		remove_child(enemy)
+		enemy.play_death_anim()
 		is_fighting = false
 		player.end_fight()
 		player.display_loots(portion_id, enemy.rarity, false)
@@ -97,4 +96,4 @@ func fight():
 		is_fighting = false
 		player.end_fight()
 		player.start_ui()
-		emit_signal("on_level_end", false)
+		emit_signal("on_level_end", true)

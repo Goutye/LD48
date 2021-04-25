@@ -5,7 +5,8 @@ signal on_level_portion_almost_finished
 
 #move
 var velocity: Vector2 = Vector2(0, 0) #pixels per seconds
-var run_speed = 100
+var run_speed = 50
+var max_speed = 300
 var gravity = 1200
 var jump_impulse = Vector2(0, -600)
 var body
@@ -58,6 +59,8 @@ func reset():
 
 
 func _process(delta):
+	$Body/Camera2D/Inventory/BossBar.set_ratio($Body.position.x / (64 * 1000))
+	
 	if not is_paused and not is_fighting:
 		#check position
 		if should_check_portion:
@@ -70,7 +73,7 @@ func _process(delta):
 func _physics_process(delta):
 	if not is_paused and not is_fighting:
 		velocity.x += run_speed
-		velocity.x = clamp(velocity.x, 0, 500)
+		velocity.x = clamp(velocity.x, 0, max_speed)
 		
 		velocity.y += gravity * delta
 		velocity = $Body.move_and_slide(velocity, Vector2(0, -1))
@@ -93,6 +96,9 @@ func update_stats():
 	var diffMaxHP = MaxHP - prevMaxHP
 	if diffMaxHP > 0:
 		HP += diffMaxHP
+		var anim = damage_anim.instance()
+		$Body.add_child(anim)
+		anim.initialize(diffMaxHP)
 		
 	$Body/Camera2D/Inventory.update_stats_ui()
 	$Body/ProgressBar.set_ratio(HP / float(MaxHP))
@@ -102,15 +108,28 @@ func display_loots(portion_id, rarity, is_treasure):
 
 func equip(item):
 	if item.type == Item.ItemType.HELMET:
+		$Body/AudioEquip.play()
 		helmet = item
 	elif item.type == Item.ItemType.ARMOR:
+		$Body/AudioEquip.play()
 		armor = item
 	elif item.type == Item.ItemType.WEAPON:
+		$Body/AudioEquip.play()
 		weapon = item
 	elif item.type == Item.ItemType.POTION:
+		$Body/AudioPotion.play()
 		HP = clamp(HP + item.heal, 0, MaxHP)
+		var anim = damage_anim.instance()
+		$Body.add_child(anim)
+		anim.initialize(item.heal)
 	
 	update_stats()
+
+func toggle_inventory_ui(value):
+	$Body/Camera2D/Inventory.visible = value
+	
+func toggle_titlescreen_ui(value):
+	$Body/Camera2D/TitleScreenUI.visible = value
 
 func start_fight():
 	is_fighting = true

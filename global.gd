@@ -9,6 +9,8 @@ var nb_restart = 0
 var time = 0
 var nb_skip = 0
 
+var boss_portion_id = 10
+
 #onready var block_class = load("res://Script/Base/Block.gd")
 #onready var user_data_tracker_class = load("res://Script/UserDataTracker.gd")
 #var BLOCK_TYPE

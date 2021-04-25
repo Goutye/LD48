@@ -2,15 +2,13 @@ extends Node2D
 
 signal level_start(level_nb)
 
-var levels = [['Forest1', 'Forest2', 'Forest3', 'Forest4']]
+var levels = [['Title'], ['Forest1', 'Forest2', 'Forest3', 'Forest4']]
 var level_offset = Vector2(64*100, 0)
 var current_level := 0
 var current_level_scene = null
 var was_success = false
 var _level_loading_in_progress = false
 var level_portion_id := 0
-
-onready var global = get_node("/root/global")
 
 func _ready():
 	randomize()
@@ -47,15 +45,22 @@ func load_current_level():
 	for child in $Level.get_children():
 		$Level.remove_child(child)
 	
-	if not was_success:
-		$Characters/Player.reset()
+	$Characters/Player.reset()
+	
+	if current_level != 0:
+		$Characters/Player.toggle_inventory_ui(true)
+		$Characters/Player.toggle_titlescreen_ui(false)
+		var portion_nb = randi() % levels[current_level].size()
+		var prev_level_scene = load('res://Levels/Level' + levels[current_level][portion_nb] + '.tscn').instance()
+		$Level.add_child(prev_level_scene)
+		prev_level_scene.position = -level_offset
+	else:
+		$Characters/Player.toggle_inventory_ui(false)
+		$Characters/Player.toggle_titlescreen_ui(true)
+		$Characters/Player/Body/Camera2D/TitleScreenUI/Control/Button.disabled = false
+		$Characters/Player/Body/Camera2D/TitleScreenUI/Control/Button.connect("pressed", self, "start_button_pressed")
 	
 	var portion_nb = randi() % levels[current_level].size()
-	var prev_level_scene = load('res://Levels/Level' + levels[current_level][portion_nb] + '.tscn').instance()
-	$Level.add_child(prev_level_scene)
-	prev_level_scene.position = -level_offset
-	
-	portion_nb = randi() % levels[current_level].size()
 	current_level_scene = load('res://Levels/Level' + levels[current_level][portion_nb] + '.tscn').instance()
 	current_level_scene.initialize(0, $Characters/Player)
 	
@@ -86,7 +91,7 @@ func on_level_portion_almost_finished():
 	$Level.remove_child($Level.get_child(0))
 	
 	var level_scene
-	if level_portion_id == 1:
+	if (level_portion_id + 1) % global.boss_portion_id == 0:
 		level_scene = load('res://Levels/LevelBoss.tscn').instance()
 	else:
 		var portion_nb = randi() % levels[current_level].size()
@@ -104,3 +109,9 @@ func on_start_level_anim_end():
 
 func get_time_ratio_before_rope_breaks():
 	return current_level_scene.get_time_ratio_before_rope_breaks()
+
+func start_button_pressed():
+	$Characters/Player/Body/Camera2D/TitleScreenUI/Control/Button/AudioStreamPlayer2D.play()
+	$Characters/Player/Body/Camera2D/TitleScreenUI/Control/Button.disabled = true
+	on_level_end(false)
+	current_level = (current_level + 1) % levels.size()

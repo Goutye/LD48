@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Assets/visitor32.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Scripts/DamageUI.gd" type="Script" id=2]
+
+[node name="Node2D" type="Node2D"]
+scale = Vector2( 0.25, 0.25 )
+z_index = 100
+script = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = -18.7132
+margin_top = -47.0021
+margin_right = 21.2868
+margin_bottom = -17.0021
+custom_fonts/font = ExtResource( 1 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/line_spacing = 1
+custom_constants/shadow_offset_y = 1
+custom_constants/shadow_as_outline = 1
+text = "2"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

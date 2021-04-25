@@ -42,7 +42,6 @@ func _process(delta):
 func on_item_click(item):
 	player.equip(item)
 	on_item_unhovered()
-	
 	reset_loots_ui()	
 
 func reset_loots_ui():
@@ -100,4 +99,5 @@ func on_third_item_hovered():
 	on_item_hovered(items[2])
 
 func _on_Button_pressed():
+	$AudioStreamPlayer2D.play()
 	reset_loots_ui()
