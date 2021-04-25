@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scenes/BossBar.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=2]
@@ -14,8 +14,10 @@
 [ext_resource path="res://Assets/Audio/SFX/potion.wav" type="AudioStream" id=12]
 [ext_resource path="res://Assets/Images/character1.png" type="Texture" id=13]
 [ext_resource path="res://Assets/Images/character2.png" type="Texture" id=14]
+[ext_resource path="res://Assets/visitor64.tres" type="DynamicFont" id=15]
+[ext_resource path="res://Assets/Audio/SFX/dodge.wav" type="AudioStream" id=16]
 
-[sub_resource type="SpriteFrames" id=2]
+[sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 13 ), ExtResource( 14 ) ],
 "loop": true,
@@ -23,7 +25,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 3.0089, 7.49023 )
 
 [node name="Player" type="Node2D"]
@@ -34,32 +36,32 @@ position = Vector2( 0, -32 )
 scale = Vector2( 4, 4 )
 
 [node name="Body" type="AnimatedSprite" parent="Body"]
-frames = SubResource( 2 )
-frame = 1
+frames = SubResource( 1 )
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
 position = Vector2( 0, 0.511546 )
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 
 [node name="Camera2D" type="Camera2D" parent="Body"]
-offset = Vector2( -256, -512 )
+offset = Vector2( -384, -512 )
 anchor_mode = 0
 current = true
 
 [node name="Inventory" parent="Body/Camera2D" instance=ExtResource( 4 )]
-position = Vector2( -56, 16 )
+position = Vector2( 33.804, 22.462 )
 z_index = 100
 
 [node name="BossBar" parent="Body/Camera2D/Inventory" instance=ExtResource( 1 )]
-position = Vector2( 148.08, -131.666 )
+position = Vector2( 26.2758, -138.128 )
 scale = Vector2( 2, 2 )
 
 [node name="LootUI" parent="Body/Camera2D" instance=ExtResource( 6 )]
-position = Vector2( 57.5774, -48.7869 )
+position = Vector2( 25.577, -72 )
 scale = Vector2( 0.25, 0.25 )
 
 [node name="TitleScreenUI" type="Node2D" parent="Body/Camera2D"]
+position = Vector2( -32, 0 )
 scale = Vector2( 0.25, 0.25 )
 z_index = 200
 
@@ -71,9 +73,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Body/Camera2D/TitleScreenUI/Control"]
-margin_left = 14.1967
+margin_left = -38.7899
 margin_top = -486.331
-margin_right = 707.197
+margin_right = 808.21
 margin_bottom = -134.331
 custom_fonts/font = ExtResource( 7 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
@@ -81,19 +83,18 @@ custom_constants/shadow_offset_x = 4
 custom_constants/line_spacing = 4
 custom_constants/shadow_offset_y = 4
 custom_constants/shadow_as_outline = 4
-text = "Deeper 
-into 
-the world"
+text = "The Deepest
+Threat"
 align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Label2" type="Label" parent="Body/Camera2D/TitleScreenUI/Control"]
-margin_left = 328.802
-margin_top = -101.402
-margin_right = 1021.8
-margin_bottom = 250.598
+margin_left = -247.589
+margin_top = -98.8173
+margin_right = 445.409
+margin_bottom = 253.183
 custom_fonts/font = ExtResource( 8 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 2
@@ -102,17 +103,16 @@ custom_constants/shadow_offset_y = 2
 custom_constants/shadow_as_outline = 2
 text = "Deeper and Deeper
 LD48 Compo - Goutye"
-align = 2
 valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Mouse" type="Label" parent="Body/Camera2D/TitleScreenUI/Control"]
-margin_left = 212.954
-margin_top = 53.7346
-margin_right = 512.954
-margin_bottom = 153.735
+margin_left = 220.708
+margin_top = 33.0569
+margin_right = 520.708
+margin_bottom = 133.057
 rect_rotation = -7.7
 rect_pivot_offset = Vector2( 150, 50 )
 custom_fonts/font = ExtResource( 8 )
@@ -144,6 +144,82 @@ __meta__ = {
 position = Vector2( -313.748, -160.956 )
 stream = ExtResource( 11 )
 
+[node name="EndScreenUI" type="Node2D" parent="Body/Camera2D"]
+scale = Vector2( 0.25, 0.25 )
+z_index = 150
+
+[node name="Control" type="Control" parent="Body/Camera2D/EndScreenUI"]
+margin_top = 8.0
+margin_right = 40.0
+margin_bottom = 48.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="Body/Camera2D/EndScreenUI/Control"]
+margin_left = 196.438
+margin_top = 152.498
+margin_right = 284.438
+margin_bottom = 188.498
+custom_fonts/font = ExtResource( 8 )
+text = "Next"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="Label" parent="Body/Camera2D/EndScreenUI/Control"]
+margin_left = -116.585
+margin_top = -244.575
+margin_right = 576.415
+margin_bottom = -83.5754
+custom_fonts/font = ExtResource( 15 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/line_spacing = 2
+custom_constants/shadow_offset_y = 2
+custom_constants/shadow_as_outline = 2
+text = "Thank you for playing!"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label4" type="Label" parent="Body/Camera2D/EndScreenUI/Control"]
+margin_left = -119.169
+margin_top = -480.754
+margin_right = 573.831
+margin_bottom = -376.754
+custom_fonts/font = ExtResource( 15 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/line_spacing = 2
+custom_constants/shadow_offset_y = 2
+custom_constants/shadow_as_outline = 2
+text = "The deepest threat
+has been vanquished!"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label5" type="Label" parent="Body/Camera2D/EndScreenUI/Control"]
+margin_left = -375.589
+margin_top = -106.817
+margin_right = 317.409
+margin_bottom = 245.183
+custom_fonts/font = ExtResource( 8 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/line_spacing = 2
+custom_constants/shadow_offset_y = 2
+custom_constants/shadow_as_outline = 2
+text = "Deeper and Deeper
+LD48 Compo - Goutye"
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="ProgressBar" parent="Body" instance=ExtResource( 3 )]
 position = Vector2( 0, -12 )
 
@@ -162,4 +238,10 @@ stream = ExtResource( 11 )
 position = Vector2( 0, 8 )
 scale = Vector2( 0.25, 0.25 )
 stream = ExtResource( 12 )
+volume_db = -10.0
+
+[node name="AudioDodge" type="AudioStreamPlayer2D" parent="Body"]
+position = Vector2( 0, 8 )
+scale = Vector2( 0.25, 0.25 )
+stream = ExtResource( 16 )
 volume_db = -10.0

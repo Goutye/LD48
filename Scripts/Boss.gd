@@ -1,3 +1,4 @@
+class_name Boss
 extends Enemy
 
 func play_death_anim():

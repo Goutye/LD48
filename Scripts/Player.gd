@@ -25,11 +25,10 @@ var armor
 var weapon
 
 #stats
-var BaseMaxHP = 10
+var BaseMaxHP = 50
 var BaseAttack = 1
-var BaseDefence = 1
+var BaseDefence = 0
 var BaseRegen = 0
-
 
 func _ready():
 	body = $Body
@@ -44,7 +43,7 @@ func reset():
 	helmet.defence = 1
 	armor = Item.new()
 	armor.type = Item.ItemType.ARMOR
-	armor.HP = 1
+	armor.HP = 10
 	weapon = Item.new()
 	weapon.type = Item.ItemType.WEAPON
 	weapon.attack = 1
@@ -52,14 +51,16 @@ func reset():
 	
 	update_stats()
 	
+	is_fighting = false
 	is_paused = false
+	is_dead = false
 	should_check_portion = true
 	$Body/ProgressBar.set_ratio(HP / float(MaxHP))
 	$Body.position.x = 0
 
 
 func _process(delta):
-	$Body/Camera2D/Inventory/BossBar.set_ratio($Body.position.x / (64 * 1000))
+	$Body/Camera2D/Inventory/BossBar.set_ratio($Body.position.x / (64 * 900))
 	
 	if not is_paused and not is_fighting:
 		#check position
@@ -92,6 +93,10 @@ func update_stats():
 	MaxHP = BaseMaxHP + helmet.HP + armor.HP + weapon.HP
 	defence = BaseDefence + helmet.defence + armor.defence + weapon.defence
 	attack = BaseAttack + helmet.attack + armor.attack + weapon.attack
+	attack_speed = helmet.attack_speed + armor.attack_speed + weapon.attack_speed
+	dodge = helmet.dodge + armor.dodge + weapon.dodge
+	piercing = helmet.piercing + armor.piercing + weapon.piercing
+	vampirism = helmet.vampirism + armor.vampirism + weapon.vampirism
 	
 	var diffMaxHP = MaxHP - prevMaxHP
 	if diffMaxHP > 0:
@@ -118,10 +123,10 @@ func equip(item):
 		weapon = item
 	elif item.type == Item.ItemType.POTION:
 		$Body/AudioPotion.play()
-		HP = clamp(HP + item.heal, 0, MaxHP)
+		HP = clamp(HP + item.heal * MaxHP, 0, MaxHP)
 		var anim = damage_anim.instance()
 		$Body.add_child(anim)
-		anim.initialize(item.heal)
+		anim.initialize(int(item.heal * MaxHP))
 	
 	update_stats()
 
@@ -130,6 +135,12 @@ func toggle_inventory_ui(value):
 	
 func toggle_titlescreen_ui(value):
 	$Body/Camera2D/TitleScreenUI.visible = value
+	
+func toggle_endscreen_ui(value):
+	$Body/Camera2D/EndScreenUI.visible = value
+
+func toggle_topbar_ui(value):
+	$Body/Camera2D/Inventory/BossBar.visible = value
 
 func start_fight():
 	is_fighting = true
@@ -142,3 +153,14 @@ func start_ui():
 	
 func end_ui():
 	is_paused = false
+
+func show_item_popup(type):
+	if type == Item.ItemType.HELMET:
+		$Body/Camera2D/Inventory.generate_popup(helmet)
+	elif type == Item.ItemType.ARMOR:
+		$Body/Camera2D/Inventory.generate_popup(armor)
+	elif type == Item.ItemType.WEAPON:
+		$Body/Camera2D/Inventory.generate_popup(weapon)
+	
+func hide_item_popup():
+	$Body/Camera2D/Inventory.reset_popup()

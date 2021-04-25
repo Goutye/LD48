@@ -3,6 +3,11 @@ extends Character
 
 signal on_fight_start(enemy)
 
+export(int) var EndMaxHP = 10
+export(int) var EndMaxAttack = 10
+export(int) var EndMaxDefence = 10
+export(int) var EndMaxPiercing = 0
+
 export(int) var rarity = 0
 export(bool) var hover = false
 
@@ -13,6 +18,13 @@ var time = 0
 func _ready():
 	$Body.connect("body_entered", self, "on_body_entered")
 	
+func initialize(portion_id):
+	var ratio = clamp(portion_id / float(global.boss_portion_id), 0.0, 1.0)
+	MaxHP = int(lerp(MaxHP, EndMaxHP, ratio))
+	HP = MaxHP
+	attack = int(lerp(attack, EndMaxAttack, ratio))
+	defence = int(lerp(defence, EndMaxDefence, ratio))
+	piercing = int(lerp(piercing, EndMaxPiercing, ratio))
 
 func _process(delta):
 	if hover:

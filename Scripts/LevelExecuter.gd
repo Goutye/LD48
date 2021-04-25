@@ -43,7 +43,6 @@ func initialize(portion_nb, player):
 	
 	var area_size = (portion_nb_pixels - portion_offset_encounter) / nb_encounters
 	
-	print(start_x, " ", player.position)
 	for i in range(nb_encounters):
 		if (portion_id + 1) % global.boss_portion_id == 0 and i == nb_encounters - 1:
 			var boss = boss_scene.instance()
@@ -58,6 +57,7 @@ func initialize(portion_nb, player):
 		if encounter_value < ratio_enemy:
 			var enemy = enemies[randi() % enemies.size()].instance()
 			add_child(enemy)
+			enemy.initialize(portion_id)
 			enemy.position.x = randf() * area_size + portion_offset_encounter * 0.5 + i * area_size
 			enemy.position.y = player.get_feet_position().y
 			enemy.connect("on_fight_start", self, "on_fight_start")
@@ -89,11 +89,14 @@ func fight():
 	else:
 		enemy.play_death_anim()
 		is_fighting = false
-		player.end_fight()
-		player.display_loots(portion_id, enemy.rarity, false)
+		if enemy is Boss:
+			emit_signal("on_level_end", true)
+		else:
+			player.end_fight()
+			player.display_loots(portion_id, enemy.rarity, false)
 		
 	if player.is_dead():
 		is_fighting = false
 		player.end_fight()
 		player.start_ui()
-		emit_signal("on_level_end", true)
+		emit_signal("on_level_end", false)

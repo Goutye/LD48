@@ -12,9 +12,13 @@ extents = Vector2( 30, 14 )
 [node name="Golem" type="Node2D"]
 script = ExtResource( 2 )
 attack = 3
-defence = 2
 MaxHP = 5
-time_every_attack = 2.5
+time_every_attack = 3.5
+piercing = 2
+EndMaxHP = 250
+EndMaxAttack = 30
+EndMaxDefence = 30
+EndMaxPiercing = 20
 rarity = 2
 extent = 1
 

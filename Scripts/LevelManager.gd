@@ -2,7 +2,7 @@ extends Node2D
 
 signal level_start(level_nb)
 
-var levels = [['Title'], ['Forest1', 'Forest2', 'Forest3', 'Forest4']]
+var levels = [['Title'], ['Forest1', 'Forest2', 'Forest3', 'Forest4'], ['End']]
 var level_offset = Vector2(64*100, 0)
 var current_level := 0
 var current_level_scene = null
@@ -45,20 +45,32 @@ func load_current_level():
 	for child in $Level.get_children():
 		$Level.remove_child(child)
 	
-	$Characters/Player.reset()
-	
-	if current_level != 0:
+	if current_level == 0:
+		$Characters/Player.reset()
+		$Characters/Player.toggle_inventory_ui(false)
+		$Characters/Player.toggle_endscreen_ui(false)
+		$Characters/Player.toggle_titlescreen_ui(true)
+		$Characters/Player/Body/Camera2D/TitleScreenUI/Control/Button.disabled = false
+		$Characters/Player/Body/Camera2D/TitleScreenUI/Control/Button.connect("pressed", self, "start_button_pressed")
+	elif current_level == 2:
+		$Characters/Player/Body.position.x = 0
 		$Characters/Player.toggle_inventory_ui(true)
+		$Characters/Player.toggle_endscreen_ui(true)
+		$Characters/Player.toggle_titlescreen_ui(false)
+		$Characters/Player.toggle_topbar_ui(false)
+		$Characters/Player/Body/Camera2D/EndScreenUI/Control/Button.disabled = false
+		$Characters/Player/Body/Camera2D/EndScreenUI/Control/Button.connect("pressed", self, "start_button_pressed")
+	else:
+		$Characters/Player.reset()
+		$Characters/Player.toggle_inventory_ui(true)
+		$Characters/Player.toggle_topbar_ui(true)
+		$Characters/Player.toggle_endscreen_ui(false)
 		$Characters/Player.toggle_titlescreen_ui(false)
 		var portion_nb = randi() % levels[current_level].size()
 		var prev_level_scene = load('res://Levels/Level' + levels[current_level][portion_nb] + '.tscn').instance()
 		$Level.add_child(prev_level_scene)
 		prev_level_scene.position = -level_offset
-	else:
-		$Characters/Player.toggle_inventory_ui(false)
-		$Characters/Player.toggle_titlescreen_ui(true)
-		$Characters/Player/Body/Camera2D/TitleScreenUI/Control/Button.disabled = false
-		$Characters/Player/Body/Camera2D/TitleScreenUI/Control/Button.connect("pressed", self, "start_button_pressed")
+
 	
 	var portion_nb = randi() % levels[current_level].size()
 	current_level_scene = load('res://Levels/Level' + levels[current_level][portion_nb] + '.tscn').instance()

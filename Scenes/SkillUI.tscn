@@ -1,17 +1,19 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Assets/visitor32.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Assets/visitor16.tres" type="DynamicFont" id=1]
 
 [node name="HBoxContainer" type="HBoxContainer"]
-margin_top = 36.0
-margin_right = 264.0
-margin_bottom = 68.0
-rect_min_size = Vector2( 0, 32 )
+margin_right = 214.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 0, 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="StatName" type="Label" parent="."]
-margin_right = 180.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 180, 32 )
+margin_right = 150.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 150, 16 )
 custom_fonts/font = ExtResource( 1 )
 text = "Test"
 __meta__ = {
@@ -19,12 +21,12 @@ __meta__ = {
 }
 
 [node name="StatValue" type="Label" parent="."]
-margin_left = 184.0
-margin_right = 264.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 80, 32 )
+margin_left = 154.0
+margin_right = 214.0
+margin_bottom = 22.0
+rect_min_size = Vector2( 60, 16 )
 custom_fonts/font = ExtResource( 1 )
-text = "+1"
+text = "+20%"
 __meta__ = {
 "_edit_use_anchors_": false
 }

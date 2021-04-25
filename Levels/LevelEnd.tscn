@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Scripts/TitleScreen.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/LevelEnd.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/TilesetForest.tres" type="TileSet" id=2]
 [ext_resource path="res://Scenes/TilesetIce.tres" type="TileSet" id=3]
 [ext_resource path="res://Scenes/TilesetLava.tres" type="TileSet" id=4]
@@ -180,7 +180,7 @@ monitorable = false
 shape = SubResource( 1 )
 
 [node name="Boss" type="Sprite" parent="."]
-position = Vector2( 1051.34, 467.758 )
+position = Vector2( 827.415, 489.965 )
 scale = Vector2( 8, 8 )
 texture = ExtResource( 6 )
 [connection signal="body_entered" from="Scene/Area2D" to="." method="_on_Area2D_body_entered"]

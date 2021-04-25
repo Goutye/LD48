@@ -53,19 +53,30 @@ func reset_loots_ui():
 	player.end_ui()
 
 func on_item_hovered(item):
+	player.show_item_popup(item.type)
+	
 	PopUpVBox.get_node("Name").text = item.name
 	if item.HP > 0:
 		add_skill("HP", item.HP)
-	elif item.defence > 0:
+	if item.defence > 0:
 		add_skill("Defence", item.defence)
-	elif item.attack > 0:
+	if item.attack > 0:
 		add_skill("Attack", item.attack)
-	elif item.heal > 0:
+	if item.heal > 0.0:
 		add_skill("Heal HP", item.heal)
+	if item.attack_speed > 0.0:
+		add_skill("Atk Speed", item.attack_speed)
+	if item.piercing > 0:
+		add_skill("Piercing", item.piercing)
+	if item.vampirism > 0.0:
+		add_skill("Vampirism", item.vampirism)
+	if item.dodge > 0.0:
+		add_skill("Dodge", item.dodge)
 	
 	$PopUp.visible = true
 
 func on_item_unhovered():
+	player.hide_item_popup()
 	$PopUp.visible = false
 	for child in PopUpVBox.get_children():
 		if not child is Label:
@@ -74,7 +85,10 @@ func on_item_unhovered():
 func add_skill(name, value):
 	var skill = SkillUI.instance()
 	skill.get_node("StatName").text = name
-	skill.get_node("StatValue").text = "+ %2.2f" % value
+	if value is int:
+		skill.get_node("StatValue").text = "+%d" % value
+	else:
+		skill.get_node("StatValue").text = "+%1.0f%%" % (value * 100)
 	PopUpVBox.add_child(skill)
 
 func on_first_item_click(event):

@@ -13,6 +13,11 @@ extents = Vector2( 20, 7.906 )
 script = ExtResource( 2 )
 MaxHP = 3
 time_every_attack = 0.75
+EndMaxHP = 150
+EndMaxAttack = 30
+EndMaxDefence = 20
+EndMaxPiercing = 10
+rarity = 1
 
 [node name="Body" type="Area2D" parent="."]
 position = Vector2( 0, -32 )

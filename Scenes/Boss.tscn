@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Assets/Images/boss.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/Boss.gd" type="Script" id=2]
@@ -6,16 +6,19 @@
 [ext_resource path="res://Scenes/AttackProgressbar.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Assets/Audio/SFX/bighit.wav" type="AudioStream" id=5]
 [ext_resource path="res://Assets/Audio/SFX/boss_beaten.wav" type="AudioStream" id=6]
+[ext_resource path="res://Assets/Audio/SFX/dodge.wav" type="AudioStream" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 60, 28 )
 
 [node name="Boss" type="Node2D"]
 script = ExtResource( 2 )
-attack = 10
-defence = 10
-MaxHP = 50
-time_every_attack = 1.5
+attack = 60
+defence = 40
+MaxHP = 1000
+dodge = 0.05
+piercing = 10
+rarity = 2
 hover = true
 extent = 5
 
@@ -45,3 +48,6 @@ stream = ExtResource( 5 )
 
 [node name="AudioDeath" type="AudioStreamPlayer2D" parent="Body"]
 stream = ExtResource( 6 )
+
+[node name="AudioDodge" type="AudioStreamPlayer" parent="Body"]
+stream = ExtResource( 7 )
