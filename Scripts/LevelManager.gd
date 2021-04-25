@@ -84,8 +84,13 @@ func on_level_end(is_success):
 func on_level_portion_almost_finished():
 	level_portion_id += 1
 	$Level.remove_child($Level.get_child(0))
-	var portion_nb = randi() % levels[current_level].size()
-	var level_scene = load('res://Levels/Level' + levels[current_level][portion_nb] + '.tscn').instance()
+	
+	var level_scene
+	if level_portion_id == 1:
+		level_scene = load('res://Levels/LevelBoss.tscn').instance()
+	else:
+		var portion_nb = randi() % levels[current_level].size()
+		level_scene = load('res://Levels/Level' + levels[current_level][portion_nb] + '.tscn').instance()
 	$Level.add_child(level_scene)
 	level_scene.position = $Level.get_child(0).position + level_offset
 	level_scene.initialize(level_portion_id, $Characters/Player)

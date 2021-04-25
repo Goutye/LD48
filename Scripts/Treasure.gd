@@ -3,18 +3,18 @@ extends Node2D
 func _ready():
 	$Area2D.connect("body_entered", self, "on_body_entered")
 
+export(int) var rarity = 0
+var portion_id
 var player
 
 func initialize(portion_id):
-	pass
+	self.portion_id = portion_id
 
 func on_body_entered(body):
 	if body.get_parent() is Player:
 		player = body.get_parent()
-		player.start_ui()
 		display_choices()
 
 func display_choices():
-	print("treasure")
+	player.display_loots(portion_id, rarity, true)
 	get_parent().remove_child(self)
-	player.end_ui()

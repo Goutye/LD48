@@ -40,5 +40,5 @@ scale = Vector2( 0.25, 0.25 )
 [node name="ProgressBar" parent="Body" instance=ExtResource( 3 )]
 position = Vector2( 0, -12 )
 
-[node name="AttackProgressBar" parent="Body" instance=ExtResource( 5 )]
-position = Vector2( 0, -10 )
+[node name="AttackProgressBar" parent="Body/ProgressBar" instance=ExtResource( 5 )]
+position = Vector2( 0, 2 )

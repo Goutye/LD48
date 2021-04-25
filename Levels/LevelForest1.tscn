@@ -1,15 +1,17 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scenes/TilesetForest.tres" type="TileSet" id=1]
 [ext_resource path="res://Scripts/LevelExecuter.gd" type="Script" id=2]
 [ext_resource path="res://Scenes/Wolf.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/Treasure.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scenes/Golem.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scenes/Slime.tscn" type="PackedScene" id=6]
 
 [node name="Scene" type="Node2D"]
 script = ExtResource( 2 )
 ratio_enemy = 0.68
 ratio_treasure = 0.35
-enemies = [ ExtResource( 3 ) ]
+enemies = [ ExtResource( 3 ), ExtResource( 5 ), ExtResource( 6 ) ]
 treasure_scene = ExtResource( 4 )
 
 [node name="Background" type="TileMap" parent="."]

@@ -8,15 +8,22 @@ export(float, 0, 1, 0.01) var ratio_enemy = 1
 export(float, 0, 1, 0.01) var ratio_treasure = 0
 
 export(Array, PackedScene) var enemies
+var boss_scene = load("res://Scenes/Boss.tscn")
 export(PackedScene) var treasure_scene
+var tilesets = [load("res://Scenes/TilesetForest.tres"), load("res://Scenes/TilesetLava.tres"), load("res://Scenes/TilesetStone.tres"), load("res://Scenes/TilesetIce.tres")]
+var tileset
 
 var portion_nb_pixels = 64 * 100
 var portion_offset_encounter = portion_nb_pixels * 0.1
+var boss_portion_id = 1
 
 #fight
 var player
 var enemy
 var is_fighting = false
+
+#stats
+var portion_id
 
 
 func _ready():
@@ -24,6 +31,13 @@ func _ready():
 	
 func initialize(portion_nb, player):
 	self.player = player
+	portion_id = portion_nb
+	
+	if portion_id != boss_portion_id:
+		tileset = tilesets[randi() % tilesets.size()]
+		$Background.tile_set = tileset
+		$Playerground.tile_set = tileset
+		$Foreground.tile_set = tileset
 	
 	var nb_encounters = randi() % (nb_encounter_max - nb_encounter_min + 1) + nb_encounter_min
 	var start_x = position.x
@@ -32,6 +46,14 @@ func initialize(portion_nb, player):
 	
 	print(start_x, " ", player.position)
 	for i in range(nb_encounters):
+		if portion_id == boss_portion_id and i == nb_encounters - 1:
+			var boss = boss_scene.instance()
+			add_child(boss)
+			boss.position.x = area_size * 0.5 + portion_offset_encounter * 0.5 + i * area_size
+			boss.position.y = player.get_feet_position().y
+			boss.connect("on_fight_start", self, "on_fight_start")
+			continue
+		
 		var encounter_value = randf()
 		
 		if encounter_value < ratio_enemy:
@@ -40,14 +62,12 @@ func initialize(portion_nb, player):
 			enemy.position.x = randf() * area_size + portion_offset_encounter * 0.5 + i * area_size
 			enemy.position.y = player.get_feet_position().y
 			enemy.connect("on_fight_start", self, "on_fight_start")
-			print(enemy.position)
 		elif encounter_value < ratio_enemy + ratio_treasure:
 			var treasure = treasure_scene.instance()
 			add_child(treasure)
 			treasure.position.x = randf() * area_size + portion_offset_encounter * 0.5 + i * area_size
 			treasure.position.y = player.get_feet_position().y
 			treasure.initialize(portion_nb)
-			print(treasure.position)
 		else:
 			print("bad value for encounter")
 
@@ -71,7 +91,10 @@ func fight():
 		remove_child(enemy)
 		is_fighting = false
 		player.end_fight()
+		player.display_loots(portion_id, enemy.rarity, false)
 		
 	if player.is_dead():
 		is_fighting = false
+		player.end_fight()
+		player.start_ui()
 		emit_signal("on_level_end", false)

@@ -32,7 +32,10 @@ func generate_popup(item):
 func add_skill(name, value):
 	var skill = SkillUI.instance()
 	skill.get_node("StatName").text = name
-	skill.get_node("StatValue").text = "+ %2.2f" % value
+	if value is int:
+		skill.get_node("StatValue").text = "+%d" % value
+	else:
+		skill.get_node("StatValue").text = "+%2.2f" % value
 	UIPopupVbox.add_child(skill)
 
 func reset_popup():
@@ -42,9 +45,9 @@ func reset_popup():
 			UIPopupVbox.remove_child(child)
 
 func update_stats_ui():
-	$Stats/PanelContainer/VBoxContainer/HP/StatValue.text = "+ 2.2f" % player.MaxHP
-	$Stats/PanelContainer/VBoxContainer/Attack/StatValue.text = "+ 2.2f" % player.Attack
-	$Stats/PanelContainer/VBoxContainer/Defence/StatValue.text = "+ 2.2f" % player.Defence
+	$Stats/PanelContainer/VBoxContainer/HP/StatValue.text = "+%d" % player.MaxHP
+	$Stats/PanelContainer/VBoxContainer/Attack/StatValue.text = "+%d" % player.attack
+	$Stats/PanelContainer/VBoxContainer/Defence/StatValue.text = "+%d" % player.defence
 
 func _on_Ability_mouse_entered():
 	pass

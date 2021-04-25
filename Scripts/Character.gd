@@ -4,6 +4,7 @@ extends Node2D
 signal on_death(character)
 
 var is_dead := false
+var is_paused := false
 
 #stats
 export(int) var attack = 1
@@ -16,17 +17,18 @@ var current_time_attack = 1.0
 
 func _ready():
 	$Body/ProgressBar.set_ratio(1.0)
-	$Body/AttackProgressBar.set_ratio(1.0)
+	$Body/ProgressBar/AttackProgressBar.set_ratio(1.0)
 	HP = MaxHP
 
 func _process(delta):
-	if current_time_attack < time_every_attack:
-		current_time_attack += delta
-		$Body/AttackProgressBar.set_ratio(clamp(current_time_attack / time_every_attack, 0.0, 1.0))
+	if not is_paused:
+		if current_time_attack < time_every_attack:
+			current_time_attack += delta
+			$Body/ProgressBar/AttackProgressBar.set_ratio(clamp(current_time_attack / time_every_attack, 0.0, 1.0))
 			
 
 func receive_damage(enemy_attack : int) -> int:
-	var damage = max(enemy_attack - defence, 0)
+	var damage = max(enemy_attack - defence, 1)
 	HP -= damage
 	$Body/ProgressBar.set_ratio(HP / float(MaxHP))
 	
@@ -41,8 +43,9 @@ func can_attack():
 	return current_time_attack >= time_every_attack
 
 func attack(enemies):
-	enemies[0].receive_damage(attack)
 	current_time_attack -= time_every_attack 
+	$Body/ProgressBar/AttackProgressBar.set_ratio(0.0)
+	enemies[0].receive_damage(attack)
 
 func is_dead():
 	return is_dead
